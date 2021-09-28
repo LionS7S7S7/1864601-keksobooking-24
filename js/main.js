@@ -1,10 +1,20 @@
+function getRandomIntInclusive(min, max) {
+    if (min >= max || min < 0 || max < 0) {
+    return ('Укажите корректный диапазон для генератора!');
+    }
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+  getRandomIntInclusive();
+
 function getRandomArbitrary(min, max,  fractions = 0) {
     if (min >= max || min < 0 || max < 0) {
       return ('Укажите корректный диапазон для генератора!');
     }
-    const DEGREE = 10 ** fractions;
-    return Math.floor((Math.random() * (max - min) + min) * DEGREE) / DEGREE;
-  }
+    const degree = 10 ** fractions;
+    return Math.floor((Math.random() * (max - min) + min) * degree) / degree;
+  };
   getRandomArbitrary();
 
 /* При разработке использовались следующие ресурсы:

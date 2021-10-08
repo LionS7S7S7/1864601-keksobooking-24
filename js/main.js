@@ -99,8 +99,7 @@ const createOffer = () => {
   const randomArray = getShuffledItems(FEATURES);
   const randomDescriptionIndex = getRandomPositiveInteger(0, DESCRIPTION.length - 1);
   const randomPhotos = getShuffledItems(PHOTOS);
-  let zero = 0;
-
+  
   if (randomAvatar < 10) {
     randomAvatar = String(randomAvatar).padStart(2, '0');
 };

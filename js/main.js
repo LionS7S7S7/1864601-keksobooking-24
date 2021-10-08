@@ -73,27 +73,20 @@ const PHOTOS = [
 
 // Создаем массив строк случайной длины из значений массива так, чтобы они не повторялись
 
-const getArray = (data) => {
-  const maxLength = data.length;
-  const lengthOfArray = getRandomPositiveInteger(1, maxLength);
-  const array = [];
+const getShuffledItems = (items) => {
+  return items.slice().sort(() => 0.5 - Math.random());
+};
 
-  while (array.length < lengthOfArray) {
-    const indexOfEl = getRandomPositiveInteger(0, maxLength - 1);
-    const el = data[indexOfEl];
+const getRandomItems = (items) => {
+  const randomIdx = getRandomPositiveInteger(0, items.length);
 
-    if (!array.includes(el)) {
-      array.push(el);
-    }
-  }
-
-  return array;
+  return getShuffledArray(items).slice(0, randomIdx);
 };
 
 // Генерируем данные
 
-const createDataGeneration = () => {
-  const randomAvatar = getRandomPositiveInteger(1, 10);
+const createOffer = () => {
+  let randomAvatar = getRandomPositiveInteger(1, 10);
   const randomTitleIndex = getRandomPositiveInteger(0, TITLE.length - 1);
   const randomLocationLat = getRandomPositiveFloat(35.65000, 35.70000, 5);
   const randomLocationLng = getRandomPositiveFloat(139.70000, 139.80000, 5);
@@ -103,18 +96,18 @@ const createDataGeneration = () => {
   const randomGuests = getRandomPositiveInteger(1, 3);
   const randomCheckinIndex = getRandomPositiveInteger(0, CHECKIN.length - 1);
   const randomCheckoutIndex = getRandomPositiveInteger(0, CHECKOUT.length - 1);
-  const randomArray = getArray(FEATURES);
+  const randomArray = getShuffledItems(FEATURES);
   const randomDescriptionIndex = getRandomPositiveInteger(0, DESCRIPTION.length - 1);
-  const randomPhotos = getArray(PHOTOS);
+  const randomPhotos = getShuffledItems(PHOTOS);
   let zero = 0;
 
-  if (randomAvatar === 10) {
-    zero = '';
+  if (randomAvatar < 10) {
+    randomAvatar = String(randomAvatar).padStart(2, '0');
 };
 
 return {
   author: {
-    avatar: `img/avatars/user${zero}${randomAvatar}.png`,
+    avatar: `img/avatars/user${randomAvatar}.png`,
   },
 
   offer: {
@@ -138,4 +131,5 @@ return {
 };
 };
 
-const similarObjects = Array.from({length: 10}, createDataGeneration);
+const similarObjects = Array.from({length: 10}, createOffer);
+console.log(similarObjects);

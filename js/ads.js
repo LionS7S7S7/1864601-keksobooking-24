@@ -17,7 +17,7 @@ const offerType = {
 // Создаём DOM-элементы, соответствующие объявлениям, и заполняем их данными
 
 // Стрелочная функция возвращает метод map, запущенный на переданном массиве данных.
-const getCardElement = (dataCards) => dataCards.map(({author, offer}) => {
+const getCardElement = ({author, offer}) => {
     const dataElement = adsTemplate.cloneNode(true);
 
       // Объявляем переменные и находим элементы по классам
@@ -77,7 +77,7 @@ const getCardElement = (dataCards) => dataCards.map(({author, offer}) => {
         }
         author.avatar ? popupAvatar.src = author.avatar : popupAvatar.remove();
   return dataElement;
-});
+};
 
 // Экспорт для main.js с последующим добавлением в конец списка с нулевым индексом
 export {mapTestCard, getCardElement};

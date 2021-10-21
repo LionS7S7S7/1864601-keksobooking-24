@@ -20,9 +20,7 @@ function getRandomPositiveInteger (a, b) {
 
 // Создаем массив строк случайной длины из значений массива так, чтобы они не повторялись
 
-const getShuffledItems = (items) => {
-  return items.slice().sort(() => 0.5 - Math.random());
-};
+const getShuffledItems = (items) => items.slice().sort(() => 0.5 - Math.random());
 
 const getRandomItems = (items) => {
   const randomIdx = getRandomPositiveInteger(0, items.length);

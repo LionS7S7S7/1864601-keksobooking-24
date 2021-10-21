@@ -27,7 +27,7 @@ const getShuffledItems = (items) => {
 const getRandomItems = (items) => {
   const randomIdx = getRandomPositiveInteger(0, items.length);
 
-  return getShuffledArray(items).slice(0, randomIdx);
+  return getShuffledItems(items).slice(0, randomIdx);
 };
 
 export {getRandomPositiveFloat, getRandomPositiveInteger, getShuffledItems};

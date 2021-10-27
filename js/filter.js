@@ -5,7 +5,7 @@ const filterItems = mapFilter.querySelectorAll('select');
 const disableFilter = () => {
   mapFilter.classList.add('map__filters--disabled');
   filterItems.forEach((filterItem) => {
-    filterItem.setAttribute('disabled', 'disabled');
+    filterItem.disabled = true;
   });
 };
 

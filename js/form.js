@@ -2,24 +2,6 @@
 
 const adForm = document.querySelector('.ad-form');
 const fieldsetBlocks = adForm.querySelectorAll('fieldset');
-
-// Блокируем содержимое блока
-const disableAdForm = () => {
-  adForm.classList.add('ad-form--disabled');
-  fieldsetBlocks.forEach((fieldsetBlock) => {
-    fieldsetBlock.disabled = true;
-  });
-};
-
-// Убираем блокировку блока
-const enableAdForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  fieldsetBlocks.forEach((fieldsetBlock) => {
-    fieldsetBlock.removeAttribute('disabled');
-  });
-};
-
-// Валидация формы заголовка объявления
 const titleInput = document.querySelector('#title');
 const offerPrice = adForm.querySelector('#price');
 const offerType = adForm.querySelector('#type');
@@ -41,6 +23,26 @@ const NUMBER_OF_GUESTS = {
   3: [1, 2, 3],
   100: [0],
 };
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
+
+// Блокируем содержимое блока
+const disableAdForm = () => {
+  adForm.classList.add('ad-form--disabled');
+  fieldsetBlocks.forEach((fieldsetBlock) => {
+    fieldsetBlock.disabled = true;
+  });
+};
+
+// Убираем блокировку блока
+const enableAdForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  fieldsetBlocks.forEach((fieldsetBlock) => {
+    fieldsetBlock.removeAttribute('disabled');
+  });
+};
+
+// Валидация формы заголовка объявления
 
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
@@ -94,6 +96,14 @@ capacity.addEventListener('input', (evt) => {
 roomNumber.addEventListener('input', (evt) => {
   checkCapacity();
   evt.target.reportValidity();
+});
+
+timeIn.addEventListener('input', (evt) => {
+  timeOut.value = evt.target.value;
+});
+
+timeOut.addEventListener('input', (evt) => {
+  timeIn.value = evt.target.value;
 });
 
 adForm.addEventListener('submit', (evt) => {

@@ -1,7 +1,8 @@
-import  {createOffer} from './data';
+import {createOffer} from './data.js';
 import {mapTestCard, getCardElement} from './ads.js';
 import {disableFilter, enableFilter} from './filter.js';
 import {disableAdForm, enableAdForm} from './form.js';
+import {generatePins} from './map.js';
 
 const DEFAULT_SIMILAR_OFFER_IDX = 0;
 // Вывод данных из модулей
@@ -17,3 +18,5 @@ disableFilter();
 disableAdForm();
 enableFilter();
 enableAdForm();
+
+generatePins(createOffer);

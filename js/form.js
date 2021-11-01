@@ -42,6 +42,13 @@ const enableAdForm = () => {
   });
 };
 
+const DEFAULT_LOCATION = {
+  lat: 35.66844,
+  lng: 139.60078,
+};
+const formAddress = adForm.querySelector('#address');
+formAddress.placeholder = `${DEFAULT_LOCATION.lat.toFixed(5)}, ${DEFAULT_LOCATION.lng.toFixed(5)}`;
+
 // Валидация формы заголовка объявления
 
 titleInput.addEventListener('input', () => {

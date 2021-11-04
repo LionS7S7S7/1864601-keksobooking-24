@@ -1,22 +1,28 @@
-import {createOffer} from './data.js';
-import {mapTestCard, getCardElement} from './ads.js';
 import {disableFilter, enableFilter} from './filter.js';
-import {disableAdForm, enableAdForm} from './form.js';
-import {generatePins} from './map.js';
+import {disableAdForm, enableAdForm, resetForm, resetButton} from './form.js';
+import {generatePins, resetMap, mapCanvas, DEFAULT_LOCATION, MAP_ZOOM} from './map.js';
+import {loadData} from './api.js';
 
-const DEFAULT_SIMILAR_OFFER_IDX = 0;
-// Вывод данных из модулей
-const similarOffers = Array.from({length: 10}, createOffer);
+const DEFAULT_SIMILAR_OFFER_IDX = 10;
 
-// Данные DOM
-const similarOffer = similarOffers[DEFAULT_SIMILAR_OFFER_IDX];
-const cardElement = getCardElement(similarOffer);
-mapTestCard.appendChild(cardElement);
+resetButton.addEventListener('click', () => {
+  resetForm();
+  resetMap();
+});
 
 // Переключение состояния страницы
 disableFilter();
 disableAdForm();
-enableFilter();
-enableAdForm();
 
-generatePins(createOffer);
+mapCanvas.addEventListener('load', () => {
+  enableAdForm();
+  loadData((serverData) => {
+    enableFilter();
+    generatePins(serverData.slice(0, DEFAULT_SIMILAR_OFFER_IDX));
+  });
+});
+
+mapCanvas.setView({
+  lat: DEFAULT_LOCATION.lat,
+  lng: DEFAULT_LOCATION.lng,
+}, MAP_ZOOM);

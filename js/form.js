@@ -1,12 +1,17 @@
 // Модуль отвечающий за перевод страницы в неактивное состояние
+import {uploadData} from './api.js';
 
 const adForm = document.querySelector('.ad-form');
+const resetButton = adForm.querySelector('.ad-form__reset');
 const fieldsetBlocks = adForm.querySelectorAll('fieldset');
 const titleInput = document.querySelector('#title');
 const offerPrice = adForm.querySelector('#price');
 const offerType = adForm.querySelector('#type');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
+const formAddress = adForm.querySelector('#address');
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
@@ -23,8 +28,10 @@ const NUMBER_OF_GUESTS = {
   3: [1, 2, 3],
   100: [0],
 };
-const timeIn = adForm.querySelector('#timein');
-const timeOut = adForm.querySelector('#timeout');
+const DEFAULT_LOCATION = {
+  lat: 35.66844,
+  lng: 139.60078,
+};
 
 // Блокируем содержимое блока
 const disableAdForm = () => {
@@ -42,15 +49,9 @@ const enableAdForm = () => {
   });
 };
 
-const DEFAULT_LOCATION = {
-  lat: 35.66844,
-  lng: 139.60078,
-};
-const formAddress = adForm.querySelector('#address');
 formAddress.placeholder = `${DEFAULT_LOCATION.lat.toFixed(5)}, ${DEFAULT_LOCATION.lng.toFixed(5)}`;
 
 // Валидация формы заголовка объявления
-
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
 
@@ -66,6 +67,11 @@ titleInput.addEventListener('input', () => {
 });
 
 // Валидация формы цены за ночь
+offerType.addEventListener('input', () => {
+  offerPrice.setAttribute('min', MIN_PRICE[offerType.value]);
+  offerPrice.placeholder = MIN_PRICE[offerType.value];
+});
+
 offerPrice.addEventListener('input', (evt) => {
   const type = offerType.value;
   evt.target.setAttribute('min', MIN_PRICE[type]);
@@ -83,7 +89,6 @@ offerPrice.addEventListener('input', (evt) => {
 
 const checkCapacity = () => {
   let isValid;
-
   if ((NUMBER_OF_GUESTS[roomNumber.value]).includes(Number(capacity.value))) {
     capacity.setCustomValidity('');
     isValid = true;
@@ -113,11 +118,16 @@ timeOut.addEventListener('input', (evt) => {
   timeIn.value = evt.target.value;
 });
 
+const resetForm = () => {
+  adForm.reset();
+};
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (checkCapacity()) {
-    evt.target.submit();
+    const formData = new FormData(evt.target);
+    uploadData(formData);
   }
 });
 
-export {disableAdForm, enableAdForm};
+export {disableAdForm, enableAdForm, resetForm, resetButton};

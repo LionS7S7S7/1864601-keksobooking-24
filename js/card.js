@@ -1,6 +1,5 @@
 // Подключаем шаблон карточки
-const adsTemplate = document.querySelector('#card').content;
-const newCardTemplate = adsTemplate.querySelector('.popup');
+const adsTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 // Подключаем блок с картой для вставки тестовой карточки
 const mapTestCard = document.querySelector('.map__canvas');
@@ -13,11 +12,11 @@ const offerType = {
   palace: 'Дворец',
   hotel: 'Отель',
 };
-
+const IMG_WIDTH = 45;
+const IMG_HEIGHT = 40;
 // Создаём DOM-элементы, соответствующие объявлениям, и заполняем их данными
-
 // Стрелочная функция возвращает метод map, запущенный на переданном массиве данных.
-const getCardElement = ({author, offer}) => {
+const getCardElement = (dataCards) => dataCards.map(({author, offer}) => {
   const dataElement = adsTemplate.cloneNode(true);
 
   // Объявляем переменные и находим элементы по классам
@@ -56,8 +55,8 @@ const getCardElement = ({author, offer}) => {
   if (features) {
     features.forEach((feature) => {
       const featureElement = document.createElement('li');
-      featureElement.classList.add('popup__feature');
-      featureElement.classList.add(`popup__feature--${feature}`);
+      featureElement.classList.add('popup__features');
+      featureElement.classList.add(`popup__features--${feature}`);
       popupFeatures.appendChild(featureElement);
     });
   } else {
@@ -68,6 +67,8 @@ const getCardElement = ({author, offer}) => {
     photos.forEach((photo) => {
       const photoElement = document.createElement('img');
       photoElement.src = photo;
+      photoElement.width = IMG_WIDTH;
+      photoElement.height = IMG_HEIGHT;
       photoElement.classList.add('popup__photo');
       photoElement.alt = 'Фотография жилья';
       popupPhotos.appendChild(photoElement);
@@ -77,7 +78,7 @@ const getCardElement = ({author, offer}) => {
   }
   author.avatar ? popupAvatar.src = author.avatar : popupAvatar.remove();
   return dataElement;
-};
+});
 
 // Экспорт для main.js с последующим добавлением в конец списка с нулевым индексом
 export {mapTestCard, getCardElement};

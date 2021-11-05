@@ -18,7 +18,7 @@ const uploadData = (body) => {
       if (response.ok) {
         showSuccessPopup();
       } else {
-        throw new Error();
+        throw new Error(['Ошибка запроса, не удалось отправить данные']);
       }
     })
     .catch(showErrorPopup);

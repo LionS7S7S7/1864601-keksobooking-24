@@ -22,10 +22,4 @@ function getRandomPositiveInteger (a, b) {
 
 const getShuffledItems = (items) => items.slice().sort(() => 0.5 - Math.random());
 
-const getRandomItems = (items) => {
-  const randomIdx = getRandomPositiveInteger(0, items.length);
-
-  return getShuffledItems(items).slice(0, randomIdx);
-};
-
 export {getRandomPositiveFloat, getRandomPositiveInteger, getShuffledItems};

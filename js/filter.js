@@ -1,5 +1,5 @@
 import {generatePins} from './map.js';
-import {debounce} from './utils/debounce.js';
+import {debounce} from './util.js';
 
 const mapFilter = document.querySelector('.map__filters');
 const filterItems = mapFilter.querySelectorAll('select');
@@ -15,6 +15,8 @@ const typeFilterElement = mapFilter.querySelector('[name="housing-type"]');
 const priceFilterElement = mapFilter.querySelector('[name="housing-price"]');
 const roomsFilterElement = mapFilter.querySelector('[name="housing-rooms"]');
 const guestsFilterElement = mapFilter.querySelector('[name="housing-guests"]');
+
+const CONTROL_DEFAULT_VALUE = 'any';
 
 const disableFilter = () => {
   mapFilter.classList.add('map__filters--disabled');
@@ -42,19 +44,19 @@ const filterFeatures = (data, feature, filter) => {
 const filterData = () => {
   let newData = window.PINS_DATA;
 
-  if (typeFilterElement.value !== 'any') {
+  if (typeFilterElement.value !== CONTROL_DEFAULT_VALUE) {
     newData = filterBase(newData, 'type', typeFilterElement);
   }
 
-  if (priceFilterElement.value !== 'any') {
+  if (priceFilterElement.value !== CONTROL_DEFAULT_VALUE) {
     newData = filterBase(newData, 'priceRange', priceFilterElement);
   }
 
-  if (roomsFilterElement.value !== 'any') {
+  if (roomsFilterElement.value !== CONTROL_DEFAULT_VALUE) {
     newData = filterBase(newData, 'rooms', roomsFilterElement);
   }
 
-  if (guestsFilterElement.value !== 'any') {
+  if (guestsFilterElement.value !== CONTROL_DEFAULT_VALUE) {
     newData = filterBase(newData, 'guests', guestsFilterElement);
   }
 

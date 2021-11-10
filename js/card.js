@@ -30,6 +30,7 @@ const getCardElement = (dataCards) => dataCards.map(({author, offer}) => {
   const popupDescription = dataElement.querySelector('.popup__description');
   const popupAvatar = dataElement.querySelector('.popup__avatar');
   const popupPhotos = dataElement.querySelector('.popup__photos');
+  const popupPhoto = dataElement.querySelector('.popup__photo');
   // Объявляем новый объект с свойствами без значений
   const {
     title,
@@ -72,6 +73,7 @@ const getCardElement = (dataCards) => dataCards.map(({author, offer}) => {
       photoElement.classList.add('popup__photo');
       photoElement.alt = 'Фотография жилья';
       popupPhotos.appendChild(photoElement);
+      popupPhoto.remove();
     });
   } else {
     popupPhotos.remove();

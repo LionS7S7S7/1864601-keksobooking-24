@@ -3,20 +3,8 @@ import {debounce} from './util.js';
 
 const mapFilter = document.querySelector('.map__filters');
 const filterItems = mapFilter.querySelectorAll('select');
-
-const wifiFilterElement = mapFilter.querySelector('[value="wifi"]');
-const dishwasherFilterElement = mapFilter.querySelector('[value="dishwasher"]');
-const parkingFilterElement = mapFilter.querySelector('[value="parking"]');
-const washerFilterElement = mapFilter.querySelector('[value="washer"]');
-const elevatorFilterElement = mapFilter.querySelector('[value="elevator"]');
-const conditionerFilterElement = mapFilter.querySelector('[value="conditioner"]');
-
-const typeFilterElement = mapFilter.querySelector('[name="housing-type"]');
-const priceFilterElement = mapFilter.querySelector('[name="housing-price"]');
-const roomsFilterElement = mapFilter.querySelector('[name="housing-rooms"]');
-const guestsFilterElement = mapFilter.querySelector('[name="housing-guests"]');
-
-const CONTROL_DEFAULT_VALUE = 'any';
+const featuresFieldsetNode = mapFilter.querySelector('#housing-features');
+const localOffers = [];
 
 const disableFilter = () => {
   mapFilter.classList.add('map__filters--disabled');
@@ -25,52 +13,55 @@ const disableFilter = () => {
   });
 };
 
-const enableFilter = () => {
+const enableFilter = (offers = []) => {
+  localOffers.push(...offers);
   mapFilter.classList.remove('map__filters--disabled');
   filterItems.forEach((filterItem) => {
     filterItem.removeAttribute('disabled');
   });
 };
 
-const filterBase = (data, key, filter) => data.filter((item) => item.offer[key] === filter.value);
+const filterBases = (data, filterByItems = [], filterByFeatures = []) => data.filter((item) => {
+  let match = true;
 
-const filterFeatures = (data, feature, filter) => {
-  if (!filter.checked) {
-    return data;
-  }
-  return data.filter((item) => item.offer.features ? item.offer.features.includes(feature) : false);
-};
+  for (const key in filterByItems)
+    if (item.offer[key] != filterByItems[key])
+      match = false;
+
+  if (item.offer.features) {
+    for (let i = 0; i < filterByFeatures.length; i++)
+      if (!item.offer.features.includes(filterByFeatures[i]))
+        match = false;
+  } else
+    match = false;
+
+  return match;
+});
 
 const filterData = () => {
-  let newData = window.PINS_DATA;
+  let newData = [];
 
-  if (typeFilterElement.value !== CONTROL_DEFAULT_VALUE) {
-    newData = filterBase(newData, 'type', typeFilterElement);
-  }
+  const filterItemsIndex = [
+    'type',
+    'priceRange',
+    'rooms',
+    'guests'
+  ];
 
-  if (priceFilterElement.value !== CONTROL_DEFAULT_VALUE) {
-    newData = filterBase(newData, 'priceRange', priceFilterElement);
-  }
+  const filterByItems = {};
+  const filterByFeatures = [];
 
-  if (roomsFilterElement.value !== CONTROL_DEFAULT_VALUE) {
-    newData = filterBase(newData, 'rooms', roomsFilterElement);
-  }
+  for (let i = 0; i < filterItems.length; i++)
+    if (filterItems[i].value != 'any')
+      filterByItems[filterItemsIndex[i]] = filterItems[i].value;
 
-  if (guestsFilterElement.value !== CONTROL_DEFAULT_VALUE) {
-    newData = filterBase(newData, 'guests', guestsFilterElement);
-  }
+  featuresFieldsetNode.querySelectorAll('input:checked').forEach((item) => filterByFeatures.push(item.value));
 
-  newData = filterFeatures(newData, wifiFilterElement.value, wifiFilterElement);
-  newData = filterFeatures(newData, dishwasherFilterElement.value, dishwasherFilterElement);
-  newData = filterFeatures(newData, parkingFilterElement.value, parkingFilterElement);
-  newData = filterFeatures(newData, washerFilterElement.value, washerFilterElement);
-  newData = filterFeatures(newData, elevatorFilterElement.value, elevatorFilterElement);
-  newData = filterFeatures(newData, conditionerFilterElement.value, conditionerFilterElement);
+  newData = filterBases(localOffers, filterByItems, filterByFeatures);
 
-  generatePins(newData.slice(0, 10));
+  generatePins(newData);
 };
 
 mapFilter.addEventListener('change', debounce(filterData));
-
 
 export {disableFilter, enableFilter};

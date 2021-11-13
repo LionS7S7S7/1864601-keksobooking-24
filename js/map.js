@@ -89,7 +89,8 @@ const createPin = (point, index, data) => {
 };
 
 // Добавляем маркеры на карту
-const generatePins = (data) => {
+const generatePins = (data, pinsCount = 10) => {
+  data = data.slice(0, pinsCount);
   const dataCardsElements = getCardElement(data);
   markerGroup.clearLayers();
   data.forEach((element,index) => {

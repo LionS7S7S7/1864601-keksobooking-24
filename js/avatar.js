@@ -37,4 +37,4 @@ const uploadPhotos = () => {
   offerPhoto.addEventListener('change', addOfferPhoto);
 };
 
-export { uploadPhotos };
+export {uploadPhotos};

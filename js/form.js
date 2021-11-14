@@ -12,6 +12,8 @@ const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const formAddress = adForm.querySelector('#address');
+const previewAvatar = document.querySelector('.ad-form-header__preview img');
+const previewPhotoContainer = document.querySelector('.ad-form__photo');
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
@@ -118,8 +120,17 @@ timeOut.addEventListener('input', (evt) => {
   timeIn.value = evt.target.value;
 });
 
+const resetPhotos = () => {
+  previewAvatar.src = '../img/muffin-grey.svg';
+
+  if (previewPhotoContainer.firstChild) {
+    previewPhotoContainer.removeChild(previewPhotoContainer.firstChild);
+  }
+};
+
 const resetForm = () => {
   adForm.reset();
+  resetPhotos();
 };
 
 adForm.addEventListener('submit', (evt) => {

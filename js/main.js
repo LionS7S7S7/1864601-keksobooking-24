@@ -2,6 +2,7 @@ import {disableFilter, enableFilter} from './filter.js';
 import {disableAdForm, enableAdForm, resetForm, resetButton} from './form.js';
 import {generatePins, resetMap, mapCanvas, DEFAULT_LOCATION, MAP_ZOOM} from './map.js';
 import {loadData} from './api.js';
+import {uploadPhotos} from './avatar.js';
 
 const LOW_PRICE_LIMIT = 10000;
 const MIDDLE_PRICE_LIMIT = 50000;
@@ -32,6 +33,8 @@ mapCanvas.addEventListener('load', () => {
     generatePins(serverData);
   });
 });
+
+uploadPhotos();
 
 mapCanvas.setView({
   lat: DEFAULT_LOCATION.lat,

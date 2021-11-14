@@ -25,8 +25,7 @@ const filterBases = (data, filterByItems = {}, filterByFeatures = []) => data.fi
   let match = true;
 
   for (const key in filterByItems)
-  // eslint-disable-next-line eqeqeq
-  {if (item.offer[key] != filterByItems[key])
+  {if (String(item.offer[key]) !== filterByItems[key])
   {match = false;}}
 
   if (item.offer.features)
@@ -50,8 +49,7 @@ const filterData = () => {
   const filterByItems = {};
   const filterByFeatures = [];
 
-  // eslint-disable-next-line eqeqeq
-  filterItems.forEach((item, key) => item.value != 'any' && (filterByItems[filterItemsIndex[key]] = item.value));
+  filterItems.forEach((item, key) => String(item.value) !== 'any' && (filterByItems[filterItemsIndex[key]] = item.value));
 
   featuresFieldsetNode.querySelectorAll('input:checked').forEach((item) => filterByFeatures.push(item.value));
 

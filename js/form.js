@@ -68,7 +68,7 @@ titleInput.addEventListener('input', () => {
 
 // Валидация формы цены за ночь
 offerType.addEventListener('input', () => {
-  offerPrice.setAttribute('min', MIN_PRICE[offerType.value]);
+  offerPrice.min(MIN_PRICE[offerType.value]);
   offerPrice.placeholder = MIN_PRICE[offerType.value];
 });
 

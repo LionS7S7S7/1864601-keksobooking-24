@@ -21,19 +21,18 @@ const enableFilter = (offers = []) => {
   });
 };
 
-const filterBases = (data, filterByItems = [], filterByFeatures = []) => data.filter((item) => {
+const filterBases = (data, filterByItems = {}, filterByFeatures = []) => data.filter((item) => {
   let match = true;
 
   for (const key in filterByItems)
-    if (item.offer[key] != filterByItems[key])
-      match = false;
+  // eslint-disable-next-line eqeqeq
+  {if (item.offer[key] != filterByItems[key])
+  {match = false;}}
 
-  if (item.offer.features) {
-    for (let i = 0; i < filterByFeatures.length; i++)
-      if (!item.offer.features.includes(filterByFeatures[i]))
-        match = false;
-  } else
-    match = false;
+  if (item.offer.features)
+  {filterByFeatures.forEach((feature) => !item.offer.features.includes(feature) && (match = false));}
+  else
+  {match = false;}
 
   return match;
 });
@@ -45,15 +44,14 @@ const filterData = () => {
     'type',
     'priceRange',
     'rooms',
-    'guests'
+    'guests',
   ];
 
   const filterByItems = {};
   const filterByFeatures = [];
 
-  for (let i = 0; i < filterItems.length; i++)
-    if (filterItems[i].value != 'any')
-      filterByItems[filterItemsIndex[i]] = filterItems[i].value;
+  // eslint-disable-next-line eqeqeq
+  filterItems.forEach((item, key) => item.value != 'any' && (filterByItems[filterItemsIndex[key]] = item.value));
 
   featuresFieldsetNode.querySelectorAll('input:checked').forEach((item) => filterByFeatures.push(item.value));
 

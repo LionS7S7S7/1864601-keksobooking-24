@@ -1,13 +1,13 @@
 import {generatePins} from './map.js';
 import {debounce} from './util.js';
 
-const mapFilter = document.querySelector('.map__filters');
-const filterItems = mapFilter.querySelectorAll('select');
-const featuresFieldsetNode = mapFilter.querySelector('#housing-features');
+const mapFilterItems = document.querySelector('.map__filters');
+const filterItems = mapFilterItems.querySelectorAll('select');
+const featuresFieldsetItems = mapFilterItems.querySelector('#housing-features');
 const localOffers = [];
 
 const disableFilter = () => {
-  mapFilter.classList.add('map__filters--disabled');
+  mapFilterItems.classList.add('map__filters--disabled');
   filterItems.forEach((filterItem) => {
     filterItem.disabled = true;
   });
@@ -15,7 +15,7 @@ const disableFilter = () => {
 
 const enableFilter = (offers = []) => {
   localOffers.push(...offers);
-  mapFilter.classList.remove('map__filters--disabled');
+  mapFilterItems.classList.remove('map__filters--disabled');
   filterItems.forEach((filterItem) => {
     filterItem.removeAttribute('disabled');
   });
@@ -51,13 +51,13 @@ const filterData = () => {
 
   filterItems.forEach((item, key) => String(item.value) !== 'any' && (filterByItems[filterItemsIndex[key]] = item.value));
 
-  featuresFieldsetNode.querySelectorAll('input:checked').forEach((item) => filterByFeatures.push(item.value));
+  featuresFieldsetItems.querySelectorAll('input:checked').forEach((item) => filterByFeatures.push(item.value));
 
   newData = filterBases(localOffers, filterByItems, filterByFeatures);
 
   generatePins(newData);
 };
 
-mapFilter.addEventListener('change', debounce(filterData));
+mapFilterItems.addEventListener('change', debounce(filterData));
 
 export {disableFilter, enableFilter};

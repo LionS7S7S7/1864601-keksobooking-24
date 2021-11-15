@@ -1,9 +1,6 @@
 // Подключаем шаблон карточки
 const adsTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-// Подключаем блок с картой для вставки тестовой карточки
-const mapTestCard = document.querySelector('.map__canvas');
-
 // Создаём объект с типами жилья
 const offerType = {
   flat: 'Квартира',
@@ -83,4 +80,4 @@ const getCardElement = (dataCards) => dataCards.map(({author, offer}) => {
 });
 
 // Экспорт для main.js с последующим добавлением в конец списка с нулевым индексом
-export {mapTestCard, getCardElement};
+export {getCardElement};

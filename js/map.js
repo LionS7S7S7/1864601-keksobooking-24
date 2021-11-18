@@ -2,11 +2,11 @@
 import {getCardElement} from './card.js';
 
 // Адрес по умолчанию
-const DEFAULT_LOCATION = {
+const DefaultLocation = {
   lat: 35.66844,
-  lng: 139.60078,
+  lng: 139.72258,
 };
-const MAP_ZOOM = 12;
+const MAP_ZOOM = 13;
 // Создаём главную метку
 const MainPin = {
   SIZE: [52, 52],
@@ -41,8 +41,8 @@ const mainPinIcon = L.icon({
 
 const mainPinMarker = L.marker(
   {
-    lat: DEFAULT_LOCATION.lat,
-    lng: DEFAULT_LOCATION.lng,
+    lat: DefaultLocation.lat,
+    lng: DefaultLocation.lng,
   },
   {
     draggable: true,
@@ -99,11 +99,11 @@ const generatePins = (data, pinsCount = 10) => {
 };
 
 const resetMap = () => {
-  mainPinMarker.setLatLng(DEFAULT_LOCATION);
+  mainPinMarker.setLatLng(DefaultLocation);
   mapCanvas.setView({
-    lat: DEFAULT_LOCATION.lat,
-    lng: DEFAULT_LOCATION.lng,
+    lat: DefaultLocation.lat,
+    lng: DefaultLocation.lng,
   }, MAP_ZOOM);
 };
 
-export {generatePins, resetMap, mapCanvas, MAP_ZOOM, DEFAULT_LOCATION};
+export {generatePins, resetMap, mapCanvas, MAP_ZOOM, DefaultLocation};

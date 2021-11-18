@@ -1,19 +1,7 @@
 // Модуль отвечающий за перевод страницы в неактивное состояние
-import {uploadData} from './api.js';
+import {sendData} from './api.js';
+import {DefaultLocation, mapCanvas, resetMap} from './map.js';
 
-const adForm = document.querySelector('.ad-form');
-const resetButton = adForm.querySelector('.ad-form__reset');
-const fieldsetBlocks = adForm.querySelectorAll('fieldset');
-const titleInput = document.querySelector('#title');
-const offerPrice = adForm.querySelector('#price');
-const offerType = adForm.querySelector('#type');
-const roomNumber = adForm.querySelector('#room_number');
-const capacity = adForm.querySelector('#capacity');
-const timeIn = adForm.querySelector('#timein');
-const timeOut = adForm.querySelector('#timeout');
-const formAddress = adForm.querySelector('#address');
-const previewAvatar = document.querySelector('.ad-form-header__preview img');
-const previewPhotoContainer = document.querySelector('.ad-form__photo');
 const MIN_NAME_LENGTH = 30;
 const MAX_NAME_LENGTH = 100;
 const MAX_PRICE = 1000000;
@@ -30,10 +18,20 @@ const NUMBER_OF_GUESTS = {
   3: [1, 2, 3],
   100: [0],
 };
-const DEFAULT_LOCATION = {
-  lat: 35.66844,
-  lng: 139.60078,
-};
+const adForm = document.querySelector('.ad-form');
+const resetButton = adForm.querySelector('.ad-form__reset');
+const fieldsetBlocks = adForm.querySelectorAll('fieldset');
+const titleInput = document.querySelector('#title');
+const offerPrice = adForm.querySelector('#price');
+const offerType = adForm.querySelector('#type');
+const roomNumber = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
+const formAddress = adForm.querySelector('#address');
+const previewAvatar = document.querySelector('.ad-form-header__preview img');
+const previewPhotoContainer = document.querySelector('.ad-form__photo');
+const mapFilters = document.querySelector('.map__filters');
 
 // Блокируем содержимое блока
 const disableAdForm = () => {
@@ -42,16 +40,6 @@ const disableAdForm = () => {
     fieldsetBlock.disabled = true;
   });
 };
-
-// Убираем блокировку блока
-const enableAdForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  fieldsetBlocks.forEach((fieldsetBlock) => {
-    fieldsetBlock.removeAttribute('disabled');
-  });
-};
-
-formAddress.placeholder = `${DEFAULT_LOCATION.lat.toFixed(5)}, ${DEFAULT_LOCATION.lng.toFixed(5)}`;
 
 // Валидация формы заголовка объявления
 titleInput.addEventListener('input', () => {
@@ -69,9 +57,14 @@ titleInput.addEventListener('input', () => {
 });
 
 // Валидация формы цены за ночь
-offerType.addEventListener('input', () => {
-  offerPrice.min(MIN_PRICE[offerType.value]);
-  offerPrice.placeholder = MIN_PRICE[offerType.value];
+offerType.addEventListener('change', () => {
+  offerPrice.min = MIN_PRICE[offerType.value];
+
+  if (typeof Intl.NumberFormat === 'function') {
+    const currencyFormater = Intl.NumberFormat('ru-RU');
+    offerPrice.placeholder = currencyFormater.format(MIN_PRICE[offerType.value]);
+  } else
+  {offerPrice.placeholder = MIN_PRICE[offerType.value];}
 });
 
 offerPrice.addEventListener('input', (evt) => {
@@ -128,17 +121,43 @@ const resetPhotos = () => {
   }
 };
 
+// устанавливаем все дефолтные значения для полей формы
+const setDefaults = () => {
+  // события для установки placeholder [Цена за ночь, руб.]
+  offerType.dispatchEvent(new Event('change'));
+  // placeholder для Адрес (координаты)
+  formAddress.placeholder = `${DefaultLocation.lat.toFixed(5)}, ${DefaultLocation.lng.toFixed(5)}`;
+  // если на карте был показан балун то закрываем его
+  mapCanvas.closePopup();
+  // сбрасываем фильтры карты
+  mapFilters.reset();
+};
+
+// Убираем блокировку блока
+const enableAdForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  fieldsetBlocks.forEach((fieldsetBlock) => {
+    fieldsetBlock.removeAttribute('disabled');
+  });
+  setDefaults();
+};
+
 const resetForm = () => {
   adForm.reset();
+  setDefaults();
   resetPhotos();
+  resetMap();
 };
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (checkCapacity()) {
     const formData = new FormData(evt.target);
-    uploadData(formData);
+    sendData(formData);
+    this.reset();
   }
 });
+
+adForm.addEventListener('reset', resetForm);
 
 export {disableAdForm, enableAdForm, resetForm, resetButton};

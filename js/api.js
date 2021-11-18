@@ -1,14 +1,14 @@
 // Модуль для отрисовки меток на карте
 import {showErrorPopup, showSuccessPopup, showAlert} from './popup.js';
 
-const loadData = (cb) => {
+const getData = (cb) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
     .then(cb)
     .catch(() => showAlert('Ошибка загрузки данных!'));
 };
 
-const uploadData = (body) => {
+const sendData = (body) => {
   fetch('https://24.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
@@ -24,4 +24,4 @@ const uploadData = (body) => {
     .catch(showErrorPopup);
 };
 
-export {loadData, uploadData};
+export {getData, sendData};

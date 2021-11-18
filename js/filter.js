@@ -5,6 +5,7 @@ const mapFilterItems = document.querySelector('.map__filters');
 const filterItems = mapFilterItems.querySelectorAll('select');
 const featuresFieldsetItems = mapFilterItems.querySelector('#housing-features');
 const localOffers = [];
+const FILTER_ITEMS_INDEX = ['type', 'priceRange', 'rooms', 'guests'];
 
 const disableFilter = () => {
   mapFilterItems.classList.add('map__filters--disabled');
@@ -19,6 +20,8 @@ const enableFilter = (offers = []) => {
   filterItems.forEach((filterItem) => {
     filterItem.removeAttribute('disabled');
   });
+  // начальное инициализация пинов на карте
+  mapFilterItems.reset();
 };
 
 const filterBases = (data, filterByItems = {}, filterByFeatures = []) => data.filter((item) => {
@@ -38,18 +41,10 @@ const filterBases = (data, filterByItems = {}, filterByFeatures = []) => data.fi
 
 const filterData = () => {
   let newData = [];
-
-  const filterItemsIndex = [
-    'type',
-    'priceRange',
-    'rooms',
-    'guests',
-  ];
-
   const filterByItems = {};
   const filterByFeatures = [];
 
-  filterItems.forEach((item, key) => String(item.value) !== 'any' && (filterByItems[filterItemsIndex[key]] = item.value));
+  filterItems.forEach((item, key) => String(item.value) !== 'any' && (filterByItems[FILTER_ITEMS_INDEX[key]] = item.value));
 
   featuresFieldsetItems.querySelectorAll('input:checked').forEach((item) => filterByFeatures.push(item.value));
 
@@ -59,5 +54,6 @@ const filterData = () => {
 };
 
 mapFilterItems.addEventListener('change', debounce(filterData));
+mapFilterItems.addEventListener('reset', debounce(filterData));
 
 export {disableFilter, enableFilter};

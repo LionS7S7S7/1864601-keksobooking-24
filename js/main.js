@@ -1,16 +1,11 @@
 import {disableFilter, enableFilter} from './filter.js';
-import {disableAdForm, enableAdForm, resetForm, resetButton} from './form.js';
-import {generatePins, resetMap, mapCanvas, DEFAULT_LOCATION, MAP_ZOOM} from './map.js';
-import {loadData} from './api.js';
+import {disableAdForm, enableAdForm} from './form.js';
+import {mapCanvas, DefaultLocation, MAP_ZOOM} from './map.js';
+import {getData} from './api.js';
 import {uploadPhotos} from './avatar.js';
 
 const LOW_PRICE_LIMIT = 10000;
 const MIDDLE_PRICE_LIMIT = 50000;
-
-resetButton.addEventListener('click', () => {
-  resetForm();
-  resetMap();
-});
 
 // Переключение состояния страницы
 disableFilter();
@@ -18,7 +13,7 @@ disableAdForm();
 
 mapCanvas.addEventListener('load', () => {
   enableAdForm();
-  loadData((serverData) => {
+  getData((serverData) => {
     enableFilter(serverData);
     serverData.forEach((serverDataItem)=> {
       let priceRange = 'low';
@@ -30,13 +25,12 @@ mapCanvas.addEventListener('load', () => {
       }
       serverDataItem.offer.priceRange = priceRange;
     });
-    generatePins(serverData);
   });
 });
 
 uploadPhotos();
 
 mapCanvas.setView({
-  lat: DEFAULT_LOCATION.lat,
-  lng: DEFAULT_LOCATION.lng,
+  lat: DefaultLocation.lat,
+  lng: DefaultLocation.lng,
 }, MAP_ZOOM);
